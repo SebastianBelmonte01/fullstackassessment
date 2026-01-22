@@ -1,8 +1,12 @@
 package com.finconecta.fseabackend.api;
 
+import com.finconecta.fseabackend.bl.ProductBl;
+import com.finconecta.fseabackend.dto.ProductDto;
 import com.finconecta.fseabackend.dto.ResponseDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,15 +23,22 @@ import org.springframework.web.bind.annotation.RestController;
  * 22.01.2026 | Sebastian Francisco Belmonte Cerveró | Creación Inicial
  * -------------------------------------------------------------------------*
  */
-@RestController
-@RequestMapping("/api/v1/users")
-public class UserApi {
+@RestController()
+@RequestMapping("/api/v1/products")
+public class ProductApi {
 
-    @GetMapping()
-    public ResponseDto<String> getUsers() {
-        ResponseDto<String> response = new ResponseDto<>(true, "Usuarios obtenidos con éxito", "Lista de usuarios", 200);
+    @Autowired
+    private ProductBl productBl;
+
+    @PostMapping()
+    public ResponseDto<ProductDto> createProduct(@RequestBody ProductDto productDto) {
+        try{
+            productDto = productBl.createProduct(productDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseDto<>(false, "Error creating product", null, 500);
+        }
+        ResponseDto<ProductDto> response = new ResponseDto<>(true, "Created sucessfully", productDto, 201);
         return response;
     }
-
-
 }
