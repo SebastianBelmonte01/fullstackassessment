@@ -6,6 +6,8 @@ import com.finconecta.fseabackend.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * -------------------------------------------------------------------------*
  * Información General
@@ -32,6 +34,7 @@ public class ProductBl {
             product.setDescription(productDto.getDescription());
             product.setPrice(productDto.getPrice());
             product.setStock(productDto.getStock());
+            product.setStatus(true);
             Product savedProduct = productRepository.save(product);
             ProductDto newProductDto = new ProductDto(savedProduct);
             return newProductDto;
@@ -40,5 +43,13 @@ public class ProductBl {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<ProductDto> getProducts() {
+        List<Product> products = productRepository.findAllByStatus(true);
+        List<ProductDto> productDtos = products.stream()
+                .map(ProductDto::new)
+                .toList();
+        return productDtos;
     }
 }

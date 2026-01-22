@@ -37,6 +37,9 @@ public class Product {
     @Column(nullable = false)
     private Double price;
 
+    @Column(nullable = false)
+    private Boolean status;
+
     @ManyToMany(mappedBy = "products")
     private Set<User> users = new HashSet<>();
 
@@ -79,6 +82,12 @@ public class Product {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+    public Boolean getStatus() {
+        return status;
+    }
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     public Set<User> getUsers() {

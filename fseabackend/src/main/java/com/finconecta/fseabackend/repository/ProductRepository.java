@@ -4,6 +4,8 @@ import com.finconecta.fseabackend.dao.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * -------------------------------------------------------------------------*
  * Información General
@@ -19,4 +21,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
+
+    List<Product> findAllByStatus(Boolean status);
 }

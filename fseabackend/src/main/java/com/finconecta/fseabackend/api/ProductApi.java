@@ -5,10 +5,9 @@ import com.finconecta.fseabackend.dto.ProductDto;
 import com.finconecta.fseabackend.dto.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * -------------------------------------------------------------------------*
@@ -39,6 +38,19 @@ public class ProductApi {
             return new ResponseDto<>(false, "Error creating product", null, 500);
         }
         ResponseDto<ProductDto> response = new ResponseDto<>(true, "Created sucessfully", productDto, 201);
+        return response;
+    }
+
+    @GetMapping()
+    public ResponseDto<List<ProductDto>> getProducts(){
+        List<ProductDto> products;
+        try{
+            products = productBl.getProducts();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseDto<>(false, "Error fetching products", null, 500);
+        }
+        ResponseDto<List<ProductDto>> response = new ResponseDto<>(true, "Products fetched successfully", products, 200);
         return response;
     }
 }
