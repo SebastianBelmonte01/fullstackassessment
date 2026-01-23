@@ -1,6 +1,7 @@
 package com.finconecta.fseabackend.dto;
 
 import com.finconecta.fseabackend.dao.Product;
+import lombok.Data;
 
 /**
  * -------------------------------------------------------------------------*

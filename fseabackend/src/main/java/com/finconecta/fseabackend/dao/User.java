@@ -38,7 +38,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserType role;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 300)
     private String password;
 
     @ManyToMany
@@ -49,7 +49,31 @@ public class User {
     )
     private Set<Product> products = new HashSet<>();
 
+    public Long getUserId() {
+        return userId;
+    }
 
+    public String getName() {
+        return name;
+    }
 
+    public String getUsername() {
+        return username;
+    }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public UserType getRole() {
+        return role;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
 }
