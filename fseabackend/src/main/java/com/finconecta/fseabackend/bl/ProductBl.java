@@ -52,4 +52,25 @@ public class ProductBl {
                 .toList();
         return productDtos;
     }
+
+    public void deactivateProduct(Long id) {
+        Product product = productRepository.findById(id).orElse(null);
+        if (product != null) {
+            product.setStatus(false);
+            productRepository.save(product);
+        }
+    }
+
+    public ProductDto updateProduct(ProductDto productDto) {
+        Product product = productRepository.findProductByProductIdAndStatus(productDto.getId(), true);
+        if (product != null) {
+            product.setName(productDto.getName());
+            product.setDescription(productDto.getDescription());
+            product.setPrice(productDto.getPrice());
+            product.setStock(productDto.getStock());
+            Product updatedProduct = productRepository.save(product);
+            return new ProductDto(updatedProduct);
+        }
+        return null;
+    }
 }

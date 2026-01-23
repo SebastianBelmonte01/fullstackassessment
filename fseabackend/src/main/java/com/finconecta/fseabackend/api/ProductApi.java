@@ -53,4 +53,31 @@ public class ProductApi {
         ResponseDto<List<ProductDto>> response = new ResponseDto<>(true, "Products fetched successfully", products, 200);
         return response;
     }
+
+    @PutMapping("/{id}/deactivate")
+    public ResponseDto<String> deactivateProduct(@PathVariable Long id) {
+        try {
+            productBl.deactivateProduct(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseDto<>(false, "Error deactivating product", null, 500);
+        }
+        return new ResponseDto<>(true, "Product deactivated successfully", null, 200);
+    }
+
+    @PutMapping()
+    public ResponseDto<ProductDto> updateProduct(@RequestBody ProductDto productDto) {
+        try {
+            productDto = productBl.updateProduct(productDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseDto<>(false, "Error updating product", null, 500);
+        }
+        if (productDto == null) {
+            return new ResponseDto<>(false, "Product not found", null, 404);
+        } else {
+            return new ResponseDto<>(true, "Product updated successfully", productDto, 200);
+        }
+    }
+
 }
