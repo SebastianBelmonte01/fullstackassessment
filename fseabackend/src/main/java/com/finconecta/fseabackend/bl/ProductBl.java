@@ -2,6 +2,7 @@ package com.finconecta.fseabackend.bl;
 
 import com.finconecta.fseabackend.dao.Product;
 import com.finconecta.fseabackend.dto.ProductDto;
+import com.finconecta.fseabackend.logging.LogService;
 import com.finconecta.fseabackend.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,8 @@ public class ProductBl {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private LogService logService;
 
     public ProductDto createProduct(ProductDto productDto) {
         try {
@@ -37,10 +40,12 @@ public class ProductBl {
             product.setStatus(true);
             Product savedProduct = productRepository.save(product);
             ProductDto newProductDto = new ProductDto(savedProduct);
+            logService.info("Product created: " + newProductDto.getId(), null);
             return newProductDto;
         }
         catch (Exception e) {
             e.printStackTrace();
+            logService.error("Error creating product: " + e.getMessage(), null);
         }
         return null;
     }
@@ -50,6 +55,7 @@ public class ProductBl {
         List<ProductDto> productDtos = products.stream()
                 .map(ProductDto::new)
                 .toList();
+        logService.info("Fetched " + productDtos.size() + " active products", null);
         return productDtos;
     }
 
@@ -57,6 +63,7 @@ public class ProductBl {
         Product product = productRepository.findById(id).orElse(null);
         if (product != null) {
             product.setStatus(false);
+            logService.info("Product deactivated: " + id, null);
             productRepository.save(product);
         }
     }
@@ -69,6 +76,7 @@ public class ProductBl {
             product.setPrice(productDto.getPrice());
             product.setStock(productDto.getStock());
             Product updatedProduct = productRepository.save(product);
+            logService.info("Product updated: " + productDto.getId(), null);
             return new ProductDto(updatedProduct);
         }
         return null;
