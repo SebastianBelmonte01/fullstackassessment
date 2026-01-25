@@ -27,6 +27,7 @@ import java.util.Map;
  * 23.01.2026 | Sebastian Francisco Belmonte Cerveró | Creación Inicial
  * -------------------------------------------------------------------------*
  */
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthApi {
