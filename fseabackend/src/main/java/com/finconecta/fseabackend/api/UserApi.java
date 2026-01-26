@@ -1,10 +1,15 @@
 package com.finconecta.fseabackend.api;
 
+import com.finconecta.fseabackend.bl.UsersBl;
+import com.finconecta.fseabackend.dao.User;
 import com.finconecta.fseabackend.dto.ResponseDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * -------------------------------------------------------------------------*
@@ -23,9 +28,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/users")
 public class UserApi {
 
+    @Autowired
+    private UsersBl usersBl;
+
     @GetMapping()
-    public ResponseDto<String> getUsers() {
-        ResponseDto<String> response = new ResponseDto<>(true, "Usuarios obtenidos con éxito", "Lista de usuarios", 200);
+    public ResponseDto<List<User>> getUsers() {
+        ResponseDto<List<User>> response = new ResponseDto<>(
+                true,
+                "Usuarios obtenidos con éxito",
+                usersBl.getAllUsers(),
+                200);
         return response;
     }
 
