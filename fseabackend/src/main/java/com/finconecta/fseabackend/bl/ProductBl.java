@@ -5,6 +5,8 @@ import com.finconecta.fseabackend.dto.ProductDto;
 import com.finconecta.fseabackend.logging.LogService;
 import com.finconecta.fseabackend.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,13 +52,17 @@ public class ProductBl {
         return null;
     }
 
-    public List<ProductDto> getProducts() {
-        List<Product> products = productRepository.findAllByStatus(true);
-        List<ProductDto> productDtos = products.stream()
-                .map(ProductDto::new)
-                .toList();
-        logService.info("Fetched " + productDtos.size() + " active products", null);
-        return productDtos;
+    public Page<ProductDto> getProducts(int page, int size) {
+        PageRequest pageable = PageRequest.of(page, size);
+
+//        List<Product> products = productRepository.findAllByStatus(true);
+//        List<ProductDto> productDtos = products.stream()
+//                .map(ProductDto::new)
+//                .toList();
+        Page<ProductDto> products = productRepository.findAllByStatus(true, pageable)
+                .map(ProductDto::new);
+        logService.info("Fetched " + products.getTotalElements() + " active products", null);
+        return products;
     }
 
     public void deactivateProduct(Long id) {

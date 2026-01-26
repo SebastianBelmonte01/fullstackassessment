@@ -4,6 +4,7 @@ import com.finconecta.fseabackend.bl.ProductBl;
 import com.finconecta.fseabackend.dto.ProductDto;
 import com.finconecta.fseabackend.dto.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,15 +43,18 @@ public class ProductApi {
     }
 
     @GetMapping()
-    public ResponseDto<List<ProductDto>> getProducts(){
-        List<ProductDto> products;
+    public ResponseDto<Page<ProductDto>> getProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ){
+        Page<ProductDto> products;
         try{
-            products = productBl.getProducts();
+            products = productBl.getProducts(page, size);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseDto<>(false, "Error fetching products", null, 500);
         }
-        ResponseDto<List<ProductDto>> response = new ResponseDto<>(true, "Products fetched successfully", products, 200);
+        ResponseDto<Page<ProductDto>> response = new ResponseDto<>(true, "Products fetched successfully", products, 200);
         return response;
     }
 
