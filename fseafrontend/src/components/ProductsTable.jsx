@@ -165,10 +165,6 @@ export default function ProductsTable() {
         setRowCount((prev) => prev + 1);
     };
 
-
-
-
-
     return (
         <>
             <Stack direction="row" justifyContent="flex-end" mb={2}>
