@@ -15,13 +15,18 @@ import { getUsers } from "../api/users.service";
 export default function UsersTable() {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [forbidden, setForbidden] = useState(false);
 
     useEffect(() => {
         const fetchUsers = async () => {
             try {
                 const response = await getUsers();
                 setUsers(response.data.data);
+
             } catch (error) {
+                if (error.response?.status === 403) {
+                    setForbidden(true);
+                }
                 console.error("Error fetching users", error);
             } finally {
                 setLoading(false);
@@ -35,6 +40,22 @@ export default function UsersTable() {
         return (
             <Box display="flex" justifyContent="center" mt={4}>
                 <CircularProgress />
+            </Box>
+        );
+    }
+
+    if (forbidden) {
+        return (
+            <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height={300}
+            >
+                <Box textAlign="center">
+                    <h2>No permission</h2>
+                    <p>You don’t have permission to view this content.</p>
+                </Box>
             </Box>
         );
     }
