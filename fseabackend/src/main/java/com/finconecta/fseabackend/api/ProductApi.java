@@ -1,6 +1,7 @@
 package com.finconecta.fseabackend.api;
 
 import com.finconecta.fseabackend.bl.ProductBl;
+import com.finconecta.fseabackend.dto.PageResponse;
 import com.finconecta.fseabackend.dto.ProductDto;
 import com.finconecta.fseabackend.dto.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,18 +44,18 @@ public class ProductApi {
     }
 
     @GetMapping()
-    public ResponseDto<Page<ProductDto>> getProducts(
+    public ResponseDto<PageResponse<ProductDto>> getProducts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size
     ){
-        Page<ProductDto> products;
+        PageResponse<ProductDto> products;
         try{
             products = productBl.getProducts(page, size);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseDto<>(false, "Error fetching products", null, 500);
         }
-        ResponseDto<Page<ProductDto>> response = new ResponseDto<>(true, "Products fetched successfully", products, 200);
+        ResponseDto<PageResponse<ProductDto>> response = new ResponseDto<>(true, "Products fetched successfully", products, 200);
         return response;
     }
 

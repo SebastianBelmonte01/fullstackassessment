@@ -1,6 +1,7 @@
 package com.finconecta.fseabackend.bl;
 
 import com.finconecta.fseabackend.dao.Product;
+import com.finconecta.fseabackend.dto.PageResponse;
 import com.finconecta.fseabackend.dto.ProductDto;
 import com.finconecta.fseabackend.logging.LogService;
 import com.finconecta.fseabackend.repository.ProductRepository;
@@ -52,18 +53,18 @@ public class ProductBl {
         return null;
     }
 
-    public Page<ProductDto> getProducts(int page, int size) {
+    public PageResponse<ProductDto> getProducts(int page, int size) {
         PageRequest pageable = PageRequest.of(page, size);
-
-//        List<Product> products = productRepository.findAllByStatus(true);
-//        List<ProductDto> productDtos = products.stream()
-//                .map(ProductDto::new)
-//                .toList();
-        Page<ProductDto> products = productRepository.findAllByStatus(true, pageable)
+        Page<ProductDto> products = productRepository
+                .findAllByStatus(true, pageable)
                 .map(ProductDto::new);
-        logService.info("Fetched " + products.getTotalElements() + " active products", null);
-        return products;
+        logService.info(
+                "Fetched " + products.getTotalElements() + " active products",
+                null
+        );
+        return new PageResponse<>(products);
     }
+
 
     public void deactivateProduct(Long id) {
         Product product = productRepository.findById(id).orElse(null);
