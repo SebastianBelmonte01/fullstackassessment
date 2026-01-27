@@ -1,0 +1,44 @@
+version: "1.1"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_DB: fsea_db
+      POSTGRES_USER: fsea_user
+      POSTGRES_PASSWORD: secret123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./fseabackend
+      dockerfile: Dockerfile
+    image: backend-app
+    container_name: backend
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./fseabackend/.env
+    volumes:
+      - backend_logs:/app/logs
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: ./fseafrontend
+      dockerfile: Dockerfile
+    image: frontend-app
+    container_name: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  backend_logs:
